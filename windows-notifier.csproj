@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Windows SDK TFM is required so the WinRT projections (Windows.UI.Notifications)
+         resolve against a single, pinned SDK assembly set. This is what sidesteps the
+         WinRT.ActivationFactory type-initializer failure seen when BurntToast loads
+         conflicting WinRT assemblies into the pwsh process. -->
+    <!-- Must be >= 10.0.18362: that's the Windows SDK floor of the toolkit's WinRT
+         (net5.0-windows10.0.18362) asset that carries the .Show() compat extension.
+         A lower value makes NuGet fall back to the non-Windows lib, which has no .Show(). -->
+    <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>windows-notifier</AssemblyName>
+    <RootNamespace>WindowsNotifier</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
+    <!-- Override the toolkit's transitive System.Drawing.Common 4.7.0, which trips a
+         critical NuGet audit advisory (GHSA-rxg9-xrhp-64gj). We use no toast imaging,
+         but pinning a patched build keeps the restore clean. -->
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

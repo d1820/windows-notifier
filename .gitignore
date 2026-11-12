@@ -1,0 +1,11 @@
+bin/
+obj/
+publish/
+
+# Commit only the single-file published exe. "dist/*" ignores dist's contents
+# (e.g. the .pdb) while leaving the dist/ dir itself walkable, so the negation
+# below can re-include the one file we ship. The exe must be a single-file publish
+# (dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o dist)
+# because the plain framework-dependent exe is only a launcher and needs its sidecar dlls.
+dist/*
+!dist/windows-notifier.exe
